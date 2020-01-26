@@ -2,6 +2,7 @@ import requests
 import pandas as pd
 from pandas.io.json import json_normalize
 
+#retreive headers from inspecting web page and looking at the requests tab for API connection
 headers = {
     'accept': 'application/json',
     'accept-encoding': 'gzip, deflate, br',
@@ -15,6 +16,7 @@ headers = {
     'x-requested-with': 'XMLHttpRequest'
 }
 
+#parameters located in same spot as headers
 p = {
     'country_code': 'US',
     'currency_code': 'USD',
@@ -32,17 +34,26 @@ p = {
 
 a = int(p['page'])
 df = pd.DataFrame()
+
 while True:
     p['page'] = str(a)
+    
+    #used a try/except block so that when no more pages can load and the error is thrown, it breaks out of the loop
     try:
+        #every time it loops add 1 to the value of page
         a += 1
         r = requests.get('https://www.vivino.com/api/explore/explore?country_code=MX&currency_code=MXN&grape_filter=varietal&min_rating=3.5&order_by=ratings_average&order=desc&page=1&price_range_max=400&price_range_min=100&wine_type_ids[]=1&wine_type_ids[]=2',headers=headers, params=p)
         complete_json = r.json()
         print('success')
+        
+        #normalize and clean up the data a little bit before sending to the dataframe
         df_data = pd.DataFrame.from_dict(json_normalize(complete_json['explore_vintage']['matches']), orient='columns')
         df = df.append(df_data)
+        
     except:
         False
+        
+#export nicely
 df.to_excel('output.xlsx', encoding='utf8')
 df.to_csv("output.csv")
 print(df.head)
