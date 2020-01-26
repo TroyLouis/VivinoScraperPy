@@ -40,7 +40,6 @@ while True:
     
     #used a try/except block so that when no more pages can load and the error is thrown, it breaks out of the loop
     try:
-        #every time it loops add 1 to the value of page
         a += 1
         r = requests.get('https://www.vivino.com/api/explore/explore?country_code=MX&currency_code=MXN&grape_filter=varietal&min_rating=3.5&order_by=ratings_average&order=desc&page=1&price_range_max=400&price_range_min=100&wine_type_ids[]=1&wine_type_ids[]=2',headers=headers, params=p)
         complete_json = r.json()
