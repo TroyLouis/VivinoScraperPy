@@ -29,35 +29,37 @@ p = {
     'wine_type_ids[]': '2',
 }
 
+
+
 def main():
-    
+
     a = int(p['page'])
     df = pd.DataFrame()
-    
-    while True:
-    p['page'] = str(a)
- 
-    try:
+
+    while a < 2000:
+        p['page'] = str(a)
         a += 1
-        r = requests.get('https://www.vivino.com/api/explore/explore?country_code=MX&currency_code=MXN&grape_filter=varietal&min_rating=3.5&order_by=ratings_average&order=desc&page=1&price_range_max=400&price_range_min=100&wine_type_ids[]=1&wine_type_ids[]=2',headers=headers, params=p)
-        complete_json = r.json()
-        print('success')
-        
-        #normalize and clean up the data a little bit before sending to the dataframe
-        df_data = pd.DataFrame.from_dict(json_normalize(complete_json['explore_vintage']['matches']), orient='columns')
-        df = df.append(df_data)
-        
-    except: 
-        False
-   
+
+        try:
+            r = requests.get(
+                'https://www.vivino.com/api/explore/explore?country_code=MX&currency_code=MXN&grape_filter=varietal&min_rating=3.5&order_by=ratings_average&order=desc&page=1&price_range_max=400&price_range_min=100&wine_type_ids[]=1&wine_type_ids[]=2',
+                headers=headers, params=p)
+            complete_json = r.json()
+            print('success')
+
+            # normalize and clean up the data a little bit before sending to the dataframe
+            df_data = pd.DataFrame.from_dict(json_normalize(complete_json['explore_vintage']['matches']), orient='columns')
+            df = df.append(df_data)
+
+        except:
+            False
+
     df.to_excel('output.xlsx', encoding='utf8')
     df.to_csv("output.csv")
-    print(df.head)
-    
+    print(df['vintage.name'].to_csv(index=False))
+
 
 if __name__ == '__main__':
     main()
-
-
 
 
