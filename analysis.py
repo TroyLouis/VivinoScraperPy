@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
 df_white_wine = pd.read_excel('white_wine_0to400_anyrating.xlsx')
 df_red_wine = pd.read_excel('red_wine_0to400_anyrating.xlsx')
