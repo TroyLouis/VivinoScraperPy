@@ -4,5 +4,4 @@
 
 
 
-![Number of Wines vs. Country of Origin](images/Figure_1.png)
 
